@@ -1,2 +1,3 @@
-1   1234    JohnCena    0   0
-2   1122    Silvee      1   1
+ID      PASS        USERNAME    TOTAL   C_ISSUED    ISBN1       ISBN2
+1       1234        JohnCena    0       0           0           0
+2       1122        Silvee      1       1           0           0

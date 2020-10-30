@@ -9,6 +9,9 @@
 void welcome();
 void login();
 void code_exit();
+void serve_menu();
+int search_book(int);
+void lend_book(int);
 
 int check_login(int, int);
 
@@ -59,6 +62,7 @@ void login()
     if (login_success)
     {
         printf("Successfully Logged In.\n");
+        serve_menu();
     }
     else
     {
@@ -87,4 +91,89 @@ int check_login(int i, int p)
     }
     fclose(file);
     return 0;
+}
+
+void serve_menu()
+{
+    int choice;
+    int isbn;
+    int check_ok;
+    puts("Enter 1 to search book.");
+    puts("Enter 2 to lend book");
+    puts("Enter 3 to deposit book");
+    scanf("%d", &choice);
+    switch (choice)
+    {
+    case 1:
+        printf("Enter ISBN: ");
+        scanf("%d", &isbn);
+        check_ok = search_book(isbn);
+        if (check_ok)
+        {
+            printf("Do You want to Lend it? (1. Yes; 2. No): ");
+            scanf("%d", &choice);
+            switch (choice)
+            {
+            case 1:
+                lend_book(isbn);
+                break;
+            case 2:
+                break;
+            default:
+                puts("Wrong Choice");
+                break;
+            }
+        }
+        break;
+    case 2:
+        printf("Enter ISBN: ");
+        scanf("%d", &isbn);
+        lend_book(isbn);
+        break;
+    case 3:
+        puts("DEPOSIT");
+        break;
+    default:
+        puts("Wrong Input");
+        break;
+    }
+}
+
+int search_book(int isbn)
+{
+    FILE *file;
+    char line[1000];
+    int dbisbn;
+    file = fopen("book.txt", "r");
+    if (file == NULL)
+    {
+        printf(RED "ERROR: File Cannot be accessed." RESET);
+        return 0;
+    }
+    while (fgets(line, 1000, file))
+    {
+        sscanf(line, "%d", &dbisbn);
+        if (isbn == dbisbn)
+        {
+            puts(line);
+            fclose(file);
+            return 1;
+        }
+    }
+    fclose(file);
+    puts("Book Not Found");
+    return 0;
+}
+
+void lend_book(int isbn)
+{
+    int check_ok = search_book(isbn);
+    if (check_ok)
+    {
+        printf("You've got the book #%d\n", isbn);
+    }
+    else
+    {
+        printf("Book #%d is not available.\n", isbn);
+    }
 }
